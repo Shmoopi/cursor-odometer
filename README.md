@@ -1,14 +1,18 @@
-# Cursor Odometer
-
-> An odometer for your cursor.
-
-![CI](https://github.com/shmoopi/cursor-odometer/actions/workflows/ci.yml/badge.svg) ![Platform: macOS 14+](https://img.shields.io/badge/Platform-macOS%2014%2B-lightgrey?style=flat-square) ![Swift 6](https://img.shields.io/badge/Swift-6-orange?style=flat-square)
-
-Cursor Odometer is a native macOS menu-bar utility that measures, in real measurements, the physical distance your mouse cursor travels — today, this week, and across the lifetime of your Mac. It is local-only and single-purpose by design. Nothing leaves your Mac.
-
 <p align="center">
   <img src="docs/menu-bar.png" alt="Cursor Odometer menu-bar window showing 10.4 m traveled today and a 7-day bar chart, with Dashboard, Settings, and Quit buttons" width="420">
 </p>
+
+<h1 align="center">Cursor Odometer</h1>
+
+> An odometer for your cursor.
+
+<p align="center">
+  <img alt="CI" src="https://github.com/shmoopi/cursor-odometer/actions/workflows/ci.yml/badge.svg">
+  <img alt="Platform: macOS 14+" src="https://img.shields.io/badge/Platform-macOS%2014%2B-lightgrey?style=flat-square">
+  <img alt="Swift 6" src="https://img.shields.io/badge/Swift-6-orange?style=flat-square">
+</p>
+
+Cursor Odometer is a native macOS menu-bar utility that measures, in real measurements, the physical distance your mouse cursor travels — today, this week, and across the lifetime of your Mac. It is local-only and single-purpose by design. Nothing leaves your Mac.
 
 ---
 
