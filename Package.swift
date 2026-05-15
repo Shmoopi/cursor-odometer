@@ -26,8 +26,6 @@ let package = Package(
             name: "CursorOdometerCore",
             path: "Sources/CursorOdometerCore",
             swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency"),
-                .enableExperimentalFeature("StrictConcurrency"),
                 .unsafeFlags(["-warnings-as-errors"], .when(configuration: .release))
             ]
         ),
@@ -51,9 +49,6 @@ let package = Package(
                 "Resources/CursorOdometer-Direct.entitlements",
                 "Resources/PrivacyInfo.xcprivacy",
                 "Resources/Assets.xcassets"
-            ],
-            swiftSettings: [
-                .enableUpcomingFeature("StrictConcurrency")
             ]
         ),
         // Comprehensive Swift Testing suite
