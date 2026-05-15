@@ -1,0 +1,70 @@
+## Swift / SwiftPM
+.build/
+.swiftpm/
+Package.resolved
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcworkspace/xcuserdata/
+DerivedData/
+
+## xcodegen-generated artifacts (project.yml is the source of truth)
+CursorOdometer.xcodeproj/
+build/
+Configs/local.xcconfig
+
+## Xcode
+xcuserdata/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcscmblueprint
+*.xccheckout
+
+## macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+## Test/coverage artifacts
+*.xcresult/
+*.gcda
+*.gcno
+coverage/
+
+## Build outputs
+*.app/
+*.dmg
+*.pkg
+*.ipa
+
+## Signing & credentials
+*.p12
+*.cer
+*.mobileprovision
+*.provisionprofile
+*.pem
+*.key
+*.p8
+AuthKey_*.p8
+*.keystore
+*.jks
+
+## Environment / secret files
+.env
+.env.*
+!.env.example
+secrets.json
+credentials.json
+*.secrets
+*.local.xcconfig
+
+## Notarization / signing logs (may contain Apple IDs)
+notarization-*.json
+notary-*.log
+
+## Editor / IDE
+.idea/
+.vscode/
+*.swp
+*.swo

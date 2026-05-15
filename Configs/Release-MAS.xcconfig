@@ -1,0 +1,9 @@
+// Mac App Store build settings.
+#include "Shared.xcconfig"
+
+PRODUCT_BUNDLE_IDENTIFIER = net.shmoopi.cursorodometer.mas
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = MAS
+CODE_SIGN_ENTITLEMENTS = Sources/CursorOdometerApp/Resources/CursorOdometer.entitlements
+CODE_SIGN_IDENTITY = 3rd Party Mac Developer Application
+ENABLE_APP_SANDBOX = YES
+ENABLE_HARDENED_RUNTIME = NO

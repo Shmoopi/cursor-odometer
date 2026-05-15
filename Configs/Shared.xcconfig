@@ -1,0 +1,11 @@
+// Shared build settings. Single source of truth for version & ID.
+
+MARKETING_VERSION = 1.0.0
+CURRENT_PROJECT_VERSION = 1
+PRODUCT_BUNDLE_IDENTIFIER = net.shmoopi.cursorodometer
+DEVELOPMENT_TEAM = ABCDE12345
+MACOSX_DEPLOYMENT_TARGET = 14.0
+SWIFT_VERSION = 6.0
+SWIFT_STRICT_CONCURRENCY = complete
+SWIFT_TREAT_WARNINGS_AS_ERRORS = YES
+OTHER_SWIFT_FLAGS = -warn-concurrency -enable-actor-data-race-checks

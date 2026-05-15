@@ -1,0 +1,12 @@
+// Debug — fast iteration, no sandbox, no signing identity required.
+#include "Shared.xcconfig"
+
+PRODUCT_BUNDLE_IDENTIFIER = net.shmoopi.cursorodometer.debug
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG
+ENABLE_APP_SANDBOX = NO
+ENABLE_HARDENED_RUNTIME = NO
+SWIFT_OPTIMIZATION_LEVEL = -Onone
+GCC_OPTIMIZATION_LEVEL = 0
+CODE_SIGN_IDENTITY = -
+CODE_SIGN_STYLE = Automatic
+ONLY_ACTIVE_ARCH = YES

@@ -1,0 +1,217 @@
+# xcodegen manifest for Cursor Odometer.
+# Run `./Scripts/bootstrap.sh` (or `xcodegen generate`) to regenerate
+# `CursorOdometer.xcodeproj` from this file. The generated project is
+# git-ignored — this YAML is the source of truth.
+#
+# Two SKUs from one codebase (Mac App Store + notarized DMG),
+# one app target, one framework, one test bundle, three build configurations.
+
+name: CursorOdometer
+
+options:
+  bundleIdPrefix: net.shmoopi
+  deploymentTarget:
+    macOS: "14.0"
+  developmentLanguage: en
+  generateEmptyDirectories: true
+  groupSortPosition: top
+  xcodeVersion: "16.0"
+  defaultConfig: Debug
+
+configs:
+  Debug: debug
+  Release-MAS: release
+  Release-Direct: release
+
+settings:
+  base:
+    # Inherit shared settings from xcconfig.
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: NO  # debug stays permissive; release flips it on
+    OTHER_SWIFT_FLAGS: "-warn-concurrency -enable-actor-data-race-checks"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: ""  # filled in via local.xcconfig (gitignored) or env
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    # Framework targets get an auto-generated Info.plist; the app target
+    # supplies its own via the `info:` block below (xcodegen auto-flips
+    # GENERATE_INFOPLIST_FILE to NO when an explicit path is given).
+    DEAD_CODE_STRIPPING: YES
+    CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
+  configs:
+    Debug:
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: "DEBUG"
+      ONLY_ACTIVE_ARCH: YES
+    Release-MAS:
+      SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: "MAS"
+      DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+    Release-Direct:
+      SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: "DIRECT"
+      DEBUG_INFORMATION_FORMAT: dwarf-with-dsym
+
+targets:
+  # ----------------------------------------------------------------------
+  # Headless measurement core. AppKit-free where possible so the test
+  # suite can run on Linux CI in the future.
+  # ----------------------------------------------------------------------
+  CursorOdometerCore:
+    type: framework
+    platform: macOS
+    sources:
+      - path: Sources/CursorOdometerCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: net.shmoopi.cursorodometer.core
+        DEFINES_MODULE: YES
+        ENABLE_TESTABILITY: YES
+        SKIP_INSTALL: YES
+        DYLIB_INSTALL_NAME_BASE: "@rpath"
+        LD_RUNPATH_SEARCH_PATHS:
+          - "$(inherited)"
+          - "@executable_path/../Frameworks"
+          - "@loader_path/Frameworks"
+        # The framework has no source-controlled Info.plist; Xcode synthesises
+        # one from INFOPLIST_KEY_* values plus our marketing/build version.
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: "Cursor Odometer Core"
+        INFOPLIST_KEY_NSHumanReadableCopyright: "Copyright © 2026 Shmoopi LLC."
+    scheme:
+      testTargets:
+        - CursorOdometerCoreTests
+
+  # ----------------------------------------------------------------------
+  # The menu-bar app. SwiftUI + AppKit shell. LSUIElement = YES so it
+  # doesn't appear in the Dock.
+  # ----------------------------------------------------------------------
+  CursorOdometer:
+    type: application
+    platform: macOS
+    sources:
+      - path: Sources/CursorOdometerApp
+        excludes:
+          - "Resources/Info.plist"
+          - "Resources/CursorOdometer.entitlements"
+          - "Resources/CursorOdometer-Direct.entitlements"
+    info:
+      path: Sources/CursorOdometerApp/Resources/Info.plist
+      properties:
+        LSUIElement: true
+        LSMinimumSystemVersion: "14.0"
+        CFBundleDevelopmentRegion: en
+        CFBundleDisplayName: "Cursor Odometer"
+        CFBundleName: "Cursor Odometer"
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        CFBundlePackageType: APPL
+        NSHumanReadableCopyright: "Copyright © 2026 Shmoopi LLC. All rights reserved."
+        NSSupportsAutomaticTermination: false
+        NSSupportsSuddenTermination: false
+    dependencies:
+      - target: CursorOdometerCore
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: net.shmoopi.cursorodometer
+        PRODUCT_NAME: "CursorOdometer"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_APP_SANDBOX: NO
+        ENABLE_HARDENED_RUNTIME: NO
+        COMBINE_HIDPI_IMAGES: YES
+        LD_RUNPATH_SEARCH_PATHS:
+          - "$(inherited)"
+          - "@executable_path/../Frameworks"
+      configs:
+        Debug:
+          PRODUCT_BUNDLE_IDENTIFIER: net.shmoopi.cursorodometer.debug
+          ENABLE_APP_SANDBOX: NO
+          ENABLE_HARDENED_RUNTIME: NO
+        Release-MAS:
+          PRODUCT_BUNDLE_IDENTIFIER: net.shmoopi.cursorodometer.mas
+          ENABLE_APP_SANDBOX: YES
+          ENABLE_HARDENED_RUNTIME: NO
+          CODE_SIGN_ENTITLEMENTS: Sources/CursorOdometerApp/Resources/CursorOdometer.entitlements
+          CODE_SIGN_IDENTITY: "3rd Party Mac Developer Application"
+          PROVISIONING_PROFILE_SPECIFIER: ""
+        Release-Direct:
+          PRODUCT_BUNDLE_IDENTIFIER: net.shmoopi.cursorodometer
+          ENABLE_APP_SANDBOX: NO
+          ENABLE_HARDENED_RUNTIME: YES
+          CODE_SIGN_ENTITLEMENTS: Sources/CursorOdometerApp/Resources/CursorOdometer-Direct.entitlements
+          CODE_SIGN_IDENTITY: "Developer ID Application"
+          PROVISIONING_PROFILE_SPECIFIER: ""
+
+  # ----------------------------------------------------------------------
+  # Swift Testing suite. `import Testing` works in Xcode 16+
+  # test bundles without extra config; XCTest is also available for the
+  # XCUITest smokes when those land.
+  # ----------------------------------------------------------------------
+  CursorOdometerCoreTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Tests/CursorOdometerCoreTests
+    dependencies:
+      - target: CursorOdometerCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: net.shmoopi.cursorodometer.core.tests
+        BUNDLE_LOADER: ""
+        TEST_HOST: ""
+        SWIFT_TREAT_WARNINGS_AS_ERRORS: NO  # test code is allowed loose ends
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: "CursorOdometerCoreTests"
+
+# ----------------------------------------------------------------------
+# Schemes — one per SKU plus a "fast" default. xcodegen's auto-generated
+# schemes are minimal; we customise to wire up the right configs for
+# build / run / test / archive.
+# ----------------------------------------------------------------------
+schemes:
+  CursorOdometer-MAS:
+    build:
+      targets:
+        CursorOdometer: all
+        CursorOdometerCoreTests: [test]
+    run:
+      config: Debug
+      executable: CursorOdometer
+    test:
+      config: Debug
+      gatherCoverageData: true
+      coverageTargets:
+        - CursorOdometerCore
+      targets:
+        - CursorOdometerCoreTests
+    profile:
+      config: Release-MAS
+    analyze:
+      config: Debug
+    archive:
+      config: Release-MAS
+
+  CursorOdometer-Direct:
+    build:
+      targets:
+        CursorOdometer: all
+        CursorOdometerCoreTests: [test]
+    run:
+      config: Debug
+      executable: CursorOdometer
+    test:
+      config: Debug
+      gatherCoverageData: true
+      coverageTargets:
+        - CursorOdometerCore
+      targets:
+        - CursorOdometerCoreTests
+    profile:
+      config: Release-Direct
+    analyze:
+      config: Debug
+    archive:
+      config: Release-Direct

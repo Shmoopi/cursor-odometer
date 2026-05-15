@@ -1,0 +1,10 @@
+// Copy to `local.xcconfig` (gitignored) and fill in your team / signing.
+// xcodegen is wired to read this when generating the project.
+
+DEVELOPMENT_TEAM = ABCDE12345
+// Keychain profile name used by `Scripts/notarize.sh`.
+NOTARY_PROFILE = AC_NOTARY
+// Apple ID used for Mac App Store uploads via Transporter.
+APP_STORE_CONNECT_API_KEY_ID = ""
+APP_STORE_CONNECT_API_KEY_ISSUER_ID = ""
+APP_STORE_CONNECT_API_KEY_PATH = ""

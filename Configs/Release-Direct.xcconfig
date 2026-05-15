@@ -1,0 +1,9 @@
+// Direct DMG build settings.
+#include "Shared.xcconfig"
+
+PRODUCT_BUNDLE_IDENTIFIER = net.shmoopi.cursorodometer
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = DIRECT
+CODE_SIGN_ENTITLEMENTS = Sources/CursorOdometerApp/Resources/CursorOdometer-Direct.entitlements
+CODE_SIGN_IDENTITY = Developer ID Application
+ENABLE_APP_SANDBOX = NO
+ENABLE_HARDENED_RUNTIME = YES
