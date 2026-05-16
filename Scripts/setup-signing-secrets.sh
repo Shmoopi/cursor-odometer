@@ -223,4 +223,4 @@ echo ""
 gh secret list --repo "$REPO"
 
 echo ""
-echo "$(green "✓") All done! Push a tag (git tag v1.0.0 && git push origin v1.0.0) to trigger a release build."
+echo "$(green "✓") All done! Push a tag (git tag v1.0.1 && git push origin v1.0.1) to trigger a release build."
